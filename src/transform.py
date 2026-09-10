@@ -9,7 +9,7 @@ def msg(mensagem):
 
     timestamp = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
-    return f"[{timestamp}] {mensagem}"
+    return print(f"[{timestamp}] {mensagem}")
 
 # Definindo função para obter os dados via chamada API
 def get_info(gameId):
@@ -71,7 +71,7 @@ def get_info(gameId):
 
 # Criar dataframe dos jogos
 def create_game(df_gamelist):
-    df_game = df_gamelist[
+    game = df_gamelist[
         [
             'gameId',
             'gameName',
@@ -84,27 +84,37 @@ def create_game(df_gamelist):
         ]
     ]
 
-    return df_game
+    
+
+    return game
 
 
 # Criar dataframe dos sistemas
 def create_system(df_gamelist):
-    df_system = df_gamelist[
+    system = df_gamelist[
         [
             'systemId',
             'systemName',
             'systemCompany',
             'systemType',
-            'SystemReleaseYear'
+            'systemReleaseYear'
         ]
     ]
 
-    return df_system
+    system.columns[
+        'id',
+        'name',
+        'company',
+        'type',
+        'releaseYear'
+    ]
+    
+    return system
 
 
 # Criar dataframe dos status
 def create_stats(df_stats):
-    df_stats = df_stats[
+    stats = df_stats[
         [
             'id',
             'gameId',
@@ -117,48 +127,48 @@ def create_stats(df_stats):
         ]
     ]
 
-    return df_stats
+    return stats
 
 
 # Criar dataframe dos desenvolvedores
 def create_developer(df_gamelist):
-    df_developer = df_gamelist[
+    developer = df_gamelist[
         [
             'developerId',
             'developerName'
         ]
     ]
 
-    return df_developer
+    return developer
 
 
 # Criar dataframe das editoras
 def create_publisher(df_gamelist):
-    df_publisher = df_gamelist[
+    publisher = df_gamelist[
         [
             'publisherId',
             'publisherName'
         ]
     ]
 
-    return df_publisher
+    return publisher
 
 
 # Criar dataframe dos gêneros
 def create_genre(df_gamelist):
-    df_genre = df_gamelist[
+    genre = df_gamelist[
         [
             'genreId',
             'genreName'
         ]
     ]
 
-    return df_genre
+    return genre
 
 
 # Criar dataframe das roms
 def create_rom(df_gamelist):
-    df_rom = df_gamelist[
+    rom = df_gamelist[
         [
             'gameId',
             'fileName'
@@ -166,12 +176,12 @@ def create_rom(df_gamelist):
         ]
     ]
 
-    return df_rom
+    return rom
 
 
 # Criar dataframe das regiões
 def create_region(df_gamelist):
-    df_region = df_gamelist[
+    region = df_gamelist[
         [
             'regionId',
             'regionShortName',
@@ -179,19 +189,19 @@ def create_region(df_gamelist):
         ]
     ]
 
-    return df_region
+    return region
 
 
 # Criar dataframe das sinopses
 def create_synopsis(df_gamelist):
-    df_synopsis = df_gamelist[
+    synopsis = df_gamelist[
         [
             'gameId',
             'text'
         ]
     ]
 
-    return df_synopsis
+    return synopsis
 
 
 # Definindo função para requisições multiplas

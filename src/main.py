@@ -11,8 +11,8 @@ from transform import (
     create_region,
     create_rom,
     create_synopsis)
-from database import (load_dataframe, get_existing_ids, DB_TABLES)
-from config import (LIST, STATS)
+from database import (load_dataframe, get_existing_ids)
+from config import (LIST, STATS, DB_TABLES)
 
 # lendo os arquivos
 gameList = pd.read_csv(LIST)
@@ -32,10 +32,13 @@ gameList = gameList[
 msg("⚡ Fazendo requisição para a API...")
 msg(f"🎮 Buscando dados para {len(gameList)} jogos...")
 
-#jogo = get_info(122976)
-#print(jogo)
+jogo = get_info(122976)
 
+df_jogos = pd.DataFrame(jogo,index=[0])
 
+systems = create_system(df_jogos)
+
+print(systems)
 
 msg("✅ Concluído.")
 
