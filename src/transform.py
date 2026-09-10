@@ -9,58 +9,190 @@ def msg(mensagem):
 
     timestamp = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
-    return f"{timestamp} {mensagem}"
+    return f"[{timestamp}] {mensagem}"
 
 # Definindo função para obter os dados via chamada API
 def get_info(gameId):
 
-    # Requisições de informações de jogos
-    game = request(URLS['games'], gameId)['jeu']
+    try:
 
-    # Informações dos jogos
-    gameId = game.get('id', '')
-    gameName = next((g.get('text') for g in game.get('noms', []) if isinstance(g, dict)), '')
-    systemId = game.get('systeme', {}).get('id', '')
-    systemName = game.get('systeme', {}).get('text', '')
-    publisherId = game.get('editeur', {}).get('id', '')
-    publisherName = game.get('editeur', {}).get('text', '')
-    developerId = game.get('developpeur', {}).get('id', '')
-    developerName = game.get('developpeur', {}).get('text', '')
-    genreId = next((g.get('id') for g in game.get('genres', []) if isinstance(g, dict)), '')
-    genreName = next((n.get('text') for g in game.get('genres', []) if isinstance(g, dict) for n in g.get('noms', []) if isinstance(n, dict) and n.get('langue') == 'pt'), '')
-    regionId = next((regionId for rom in game.get('roms', []) if isinstance(rom, dict) for regionId in rom.get('regions', {}).get('regions_id', [])),'')
-    regionShortname = next((r for rom in game.get('roms', []) if isinstance(rom, dict) for r in rom.get('regions', {}).get('regions_shortname', [])),'')
-    regionFullname = next((r for rom in game.get('roms', []) if isinstance(rom, dict) for r in rom.get('regions', {}).get('regions_pt', [])),'')
-    gameReleaseDate = next((d.get('text') for d in game.get('dates', []) if isinstance(d, dict)), '')
-    synopsis = next((s.get('text') for s in game.get('synopsis', []) if isinstance(s, dict) and s.get('langue') == 'pt'), '')
+        # Requisições de informações de jogos
+        game = request(URLS['games'], gameId)['jeu']
+
+        # Informações dos jogos
+        gameId = game.get('id', '')
+        gameName = next((g.get('text') for g in game.get('noms', []) if isinstance(g, dict)), '')
+        systemId = game.get('systeme', {}).get('id', '')
+        systemName = game.get('systeme', {}).get('text', '')
+        publisherId = game.get('editeur', {}).get('id', '')
+        publisherName = game.get('editeur', {}).get('text', '')
+        developerId = game.get('developpeur', {}).get('id', '')
+        developerName = game.get('developpeur', {}).get('text', '')
+        genreId = next((g.get('id') for g in game.get('genres', []) if isinstance(g, dict)), '')
+        genreName = next((n.get('text') for g in game.get('genres', []) if isinstance(g, dict) for n in g.get('noms', []) if isinstance(n, dict) and n.get('langue') == 'pt'), '')
+        regionId = next((regionId for rom in game.get('roms', []) if isinstance(rom, dict) for regionId in rom.get('regions', {}).get('regions_id', [])),'')
+        regionShortname = next((r for rom in game.get('roms', []) if isinstance(rom, dict) for r in rom.get('regions', {}).get('regions_shortname', [])),'')
+        regionFullname = next((r for rom in game.get('roms', []) if isinstance(rom, dict) for r in rom.get('regions', {}).get('regions_pt', [])),'')
+        gameReleaseDate = next((d.get('text') for d in game.get('dates', []) if isinstance(d, dict)), '')
+        synopsis = next((s.get('text') for s in game.get('synopsis', []) if isinstance(s, dict) and s.get('langue') == 'pt'), '')
+        
+        system = request(URLS['systems'], systemId)['systemes']
+
+        # Informações dos sistemas
+        systemCompany = next((item.get('compagnie') for item in system if item.get('id') == int(systemId)),'')
+        systemType = next((item.get('type') for item in system if item.get('id') == int(systemId)),'')
+        systemReleaseYear = next((item.get('datedebut') for item in system if item.get('id') == int(systemId)),'')
+
+        return{
+            'gameId': gameId,
+            'gameName': gameName,
+            'systemId': systemId,
+            'systemName': systemName,
+            'systemCompany': systemCompany,
+            'systemType': systemType,
+            'systemReleaseYear': systemReleaseYear,
+            'publisherId': publisherId,
+            'publisherName': publisherName,
+            'developerId': developerId,
+            'developerName': developerName,
+            'genreId': genreId,
+            'genreName': genreName,
+            'regionId': regionId,
+            'regionShortname': regionShortname,
+            'regionFullname': regionFullname,
+            'gameReleaseDate' : gameReleaseDate,
+            'synopsis': synopsis
+        }
     
-    system = request(URLS['systems'], systemId)['systemes']
+    except request.exceptions.RequestException as e:
 
-    # Informações dos sistemas
-    systemCompany = next((item.get('compagnie') for item in system if item.get('id') == int(systemId)),'')
-    systemType = next((item.get('type') for item in system if item.get('id') == int(systemId)),'')
-    systemReleaseYear = next((item.get('datedebut') for item in system if item.get('id') == int(systemId)),'')
+        msg(f"❌ Erro no ID {gameId}: {e}")
 
-    return{
-        'gameId': gameId,
-        'gameName': gameName,
-        'systemId': systemId,
-        'systemName': systemName,
-        'systemCompany': systemCompany,
-        'systemType': systemType,
-        'systemReleaseYear': systemReleaseYear,
-        'publisherId': publisherId,
-        'publisherName': publisherName,
-        'developerId': developerId,
-        'developerName': developerName,
-        'genreId': genreId,
-        'genreName': genreName,
-        'regionId': regionId,
-        'regionShortname': regionShortname,
-        'regionFullname': regionFullname,
-        'gameReleaseDate' : gameReleaseDate,
-        'synopsis': synopsis
-    }
+
+# Criar dataframe dos jogos
+def create_game(df_gamelist):
+    df_game = df_gamelist[
+        [
+            'gameId',
+            'gameName',
+            'systemId',
+            'genreId',
+            'developerId',
+            'publisherId',
+            'regionId',
+            'releaseDate'
+        ]
+    ]
+
+    return df_game
+
+
+# Criar dataframe dos sistemas
+def create_system(df_gamelist):
+    df_system = df_gamelist[
+        [
+            'systemId',
+            'systemName',
+            'systemCompany',
+            'systemType',
+            'SystemReleaseYear'
+        ]
+    ]
+
+    return df_system
+
+
+# Criar dataframe dos status
+def create_stats(df_stats):
+    df_stats = df_stats[
+        [
+            'id',
+            'gameId',
+            'startTime',
+            'endTime',
+            'playTime',
+            'beat',
+            'beatDate',
+            'grade'
+        ]
+    ]
+
+    return df_stats
+
+
+# Criar dataframe dos desenvolvedores
+def create_developer(df_gamelist):
+    df_developer = df_gamelist[
+        [
+            'developerId',
+            'developerName'
+        ]
+    ]
+
+    return df_developer
+
+
+# Criar dataframe das editoras
+def create_publisher(df_gamelist):
+    df_publisher = df_gamelist[
+        [
+            'publisherId',
+            'publisherName'
+        ]
+    ]
+
+    return df_publisher
+
+
+# Criar dataframe dos gêneros
+def create_genre(df_gamelist):
+    df_genre = df_gamelist[
+        [
+            'genreId',
+            'genreName'
+        ]
+    ]
+
+    return df_genre
+
+
+# Criar dataframe das roms
+def create_rom(df_gamelist):
+    df_rom = df_gamelist[
+        [
+            'gameId',
+            'fileName'
+            'systemId'
+        ]
+    ]
+
+    return df_rom
+
+
+# Criar dataframe das regiões
+def create_region(df_gamelist):
+    df_region = df_gamelist[
+        [
+            'regionId',
+            'regionShortName',
+            'regionFullName'
+        ]
+    ]
+
+    return df_region
+
+
+# Criar dataframe das sinopses
+def create_synopsis(df_gamelist):
+    df_synopsis = df_gamelist[
+        [
+            'gameId',
+            'text'
+        ]
+    ]
+
+    return df_synopsis
+
 
 # Definindo função para requisições multiplas
 def multiTheadRequest(gameId,ids):
@@ -70,9 +202,8 @@ def multiTheadRequest(gameId,ids):
 
     # Execução da função de requisição, utilizando multithread
     with ThreadPoolExecutor(max_workers=5) as executor:
-        futures = {executor.submit(get_info, gameId): gameId for gameId in ids}
-        for future in tqdm(as_completed(futures), total=len(futures), desc="Processando jogos"):
-            result = future.result()
-            if result:
-                results.append(result)
-            time.sleep(0.1)
+        future = {executor.submit(get_info, gameId): gameId for gameId in ids}
+        result = future.result()
+        if result:
+            results.append(result)
+        time.sleep(0.1)

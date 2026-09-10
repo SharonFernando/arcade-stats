@@ -22,6 +22,19 @@ NAME = os.getenv('DB_NAME')
 USER = os.getenv('DB_USER')
 PASSWORD = os.getenv('DB_PASSWORD')
 
+# Tabelas banco de dados 
+DB_TABLES = {
+    'game': 'game',
+    'system': 'system',
+    'developer': 'developer',
+    'publisher': 'publisher',
+    'genre': 'genre',
+    'rom': 'rom',
+    'region': 'region',
+    'stats': 'stats',
+    'synopsis': 'synopsis'
+}
+
 # Arquivos
 LIST = "gamelist.csv"
 STATS = "stats.csv"
