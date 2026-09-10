@@ -8,7 +8,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 def msg(mensagem):
 
     timestamp = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-    tqdm.write(f"[{timestamp}] {mensagem}")
+
+    return f"{timestamp} {mensagem}"
 
 # Definindo função para obter os dados via chamada API
 def get_info(gameId):

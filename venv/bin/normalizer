@@ -1,4 +1,4 @@
-#!/home/ubuntu/projetos/arcade/venv/bin/python3
+#!/home/ubuntu/projetos/arcade-stats/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

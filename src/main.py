@@ -1,5 +1,5 @@
 import pandas as pd
-from transform import get_info
+from transform import get_info, msg
 from config import (LIST, STATS)
 
 # lendo os arquivos
@@ -17,5 +17,10 @@ gameList = gameList[
     ]
 ]
 
-jogo = get_info(122976)
-print(jogo)
+#for game in gameList['id']:
+#    print(game)
+
+print(msg("teste"))
+
+#jogo = get_info(122976)
+#print(jogo)
