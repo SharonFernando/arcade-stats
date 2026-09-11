@@ -126,14 +126,19 @@ def create_stats(df_stats):
     stats = df_stats[
         [
             'id',
+            'game_id',
+            'start_time',
+            'end_time',
+            'playtime'
+        ]
+    ]
+
+    stats.columns = [
+            'id',
             'gameId',
             'startTime',
             'endTime',
-            'playTime',
-            'beat',
-            'beatDate',
-            'grade'
-        ]
+            'playTime'
     ]
 
     return stats

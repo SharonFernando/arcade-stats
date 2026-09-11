@@ -42,8 +42,8 @@ print(game)
 systems = create_system(df_jogos)
 print(systems)
 
-#stats = create_stats(df_jogos)
-#print(stats)
+stats = create_stats(statsList)
+print(stats)
 
 genre = create_genre(df_jogos)
 print(genre)
@@ -57,11 +57,10 @@ print(publisher)
 region = create_region(df_jogos)
 print(region)
 
-#rom = create_rom(df_jogos)
-#print(rom)
+rom = create_rom(gameList)
+print(rom)
 
 synopsis = create_synopsis(df_jogos)
 print(synopsis)
 
 msg("✅ Concluído.")
-
