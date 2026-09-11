@@ -11,7 +11,8 @@ def msg(mensagem):
 
     return print(f"[{timestamp}] {mensagem}")
 
-# Definindo função para obter os dados via chamada API
+
+# Função para obter os dados via chamada API
 def get_info(gameId):
 
     try:
@@ -199,10 +200,16 @@ def create_genre(df_gamelist):
 def create_rom(df_gamelist):
     rom = df_gamelist[
         [
-            'gameId',
-            'fileName',
+            'id',
+            'rom',
             'systemId'
         ]
+    ]
+
+    rom.columns = [
+        'gameId',
+        'fileName',
+        'systemId'
     ]
 
     return rom
