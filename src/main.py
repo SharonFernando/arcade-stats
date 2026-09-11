@@ -36,9 +36,32 @@ jogo = get_info(122976)
 
 df_jogos = pd.DataFrame(jogo,index=[0])
 
-systems = create_system(df_jogos)
+game = create_game(df_jogos)
+print(game)
 
+systems = create_system(df_jogos)
 print(systems)
+
+#stats = create_stats(df_jogos)
+#print(stats)
+
+genre = create_genre(df_jogos)
+print(genre)
+
+developer = create_developer(df_jogos)
+print(developer)
+
+publisher = create_publisher(df_jogos)
+print(publisher)
+
+region = create_region(df_jogos)
+print(region)
+
+#rom = create_rom(df_jogos)
+#print(rom)
+
+synopsis = create_synopsis(df_jogos)
+print(synopsis)
 
 msg("✅ Concluído.")
 

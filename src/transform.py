@@ -80,11 +80,20 @@ def create_game(df_gamelist):
             'developerId',
             'publisherId',
             'regionId',
-            'releaseDate'
+            'gameReleaseDate'
         ]
     ]
 
-    
+    game.columns = [
+        'id',
+        'name',
+        'systemId',
+        'genreId',
+        'developerId',
+        'publisherId',
+        'regionId',
+        'releaseDate'
+    ]
 
     return game
 
@@ -101,7 +110,7 @@ def create_system(df_gamelist):
         ]
     ]
 
-    system.columns[
+    system.columns = [
         'id',
         'name',
         'company',
@@ -139,6 +148,11 @@ def create_developer(df_gamelist):
         ]
     ]
 
+    developer.columns = [
+            'id',
+            'name'
+        ]
+    
     return developer
 
 
@@ -151,6 +165,11 @@ def create_publisher(df_gamelist):
         ]
     ]
 
+    publisher.columns = [
+            'id',
+            'name'
+        ]
+    
     return publisher
 
 
@@ -163,6 +182,11 @@ def create_genre(df_gamelist):
         ]
     ]
 
+    genre.columns = [
+            'id',
+            'name'
+        ]
+
     return genre
 
 
@@ -171,7 +195,7 @@ def create_rom(df_gamelist):
     rom = df_gamelist[
         [
             'gameId',
-            'fileName'
+            'fileName',
             'systemId'
         ]
     ]
@@ -184,10 +208,16 @@ def create_region(df_gamelist):
     region = df_gamelist[
         [
             'regionId',
-            'regionShortName',
-            'regionFullName'
+            'regionShortname',
+            'regionFullname'
         ]
     ]
+
+    region.columns = [
+            'id',
+            'shortName',
+            'fullName'
+        ]
 
     return region
 
@@ -197,8 +227,13 @@ def create_synopsis(df_gamelist):
     synopsis = df_gamelist[
         [
             'gameId',
-            'text'
+            'synopsis'
         ]
+    ]
+
+    synopsis.columns = [
+        'gameId',
+        'text'
     ]
 
     return synopsis
