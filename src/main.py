@@ -1,6 +1,6 @@
 import pandas as pd
+from database import load_dataframe
 from transform import (
-    get_info,
     msg,
     create_game,
     create_system,
@@ -10,9 +10,14 @@ from transform import (
     create_publisher,
     create_region,
     create_rom,
-    create_synopsis)
-from database import (load_dataframe, get_existing_ids)
-from config import (LIST, STATS, DB_TABLES)
+    create_synopsis,
+    multiTheadRequest
+)
+from config import (
+    LIST, 
+    STATS, 
+    DB_TABLES
+)
 
 # lendo os arquivos
 gameList = pd.read_csv(LIST)
@@ -21,42 +26,42 @@ statsList = pd.read_csv(STATS)
 roms = gameList[["id","rom"]].dropna(subset=['id']).drop_duplicates(subset=['id'])
 
 msg("⚡ Fazendo requisição para a API...")
-msg(f"🎮 Buscando dados para {len(gameList)} jogos...")
+msg(f"🎮 Buscando dados para {len(roms)} jogos...")
 
-jogo = get_info(122976)
+for rom in roms['id'][:2]:
+    jogo = multiTheadRequest(rom, roms['id'], roms)
 
 df_games = pd.DataFrame(jogo,index=[0])
+
 roms['id'] = roms['id'].astype(int)
 df_games['gameId'] = df_games['gameId'].astype(int)
 df_games = df_games.merge(roms, left_on='gameId', right_on='id', how='left')
 
-print(df_games)
-
 game = create_game(df_games)
-print(game)
+load_dataframe(game, DB_TABLES['game'])
 
 systems = create_system(df_games)
-print(systems)
+load_dataframe(systems, DB_TABLES['system'])
 
 stats = create_stats(statsList)
-print(stats)
+load_dataframe(stats, DB_TABLES['stats'])
 
 genre = create_genre(df_games)
-print(genre)
+load_dataframe(genre, DB_TABLES['genre'])
 
 developer = create_developer(df_games)
-print(developer)
+load_dataframe(developer, DB_TABLES['developer'])
 
 publisher = create_publisher(df_games)
-print(publisher)
+load_dataframe(publisher, DB_TABLES['publisher'])
 
 region = create_region(df_games)
-print(region)
+load_dataframe(region, DB_TABLES['region'])
 
 rom = create_rom(df_games)
-print(rom)
+load_dataframe(rom, DB_TABLES['rom'])
 
 synopsis = create_synopsis(df_games)
-print(synopsis)
+load_dataframe(synopsis, DB_TABLES['synopsis'])
 
 msg("✅ Concluído.")
