@@ -264,7 +264,7 @@ def create_synopsis(df_gamelist):
 
 
 # Definindo função para requisições multiplas
-def multiTheadRequest(gameId, ids, gameList):
+def multiTheadRequest(gameId, ids):
 
     msg(f'🎮 Buscando informação para o id {gameId}...')
 
@@ -290,4 +290,4 @@ def multiTheadRequest(gameId, ids, gameList):
             except Exception as e:
                 msg(f"❌ Erro no jogo {gameId}: {e}")
 
-    return
+    return results
